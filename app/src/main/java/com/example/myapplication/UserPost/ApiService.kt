@@ -8,8 +8,6 @@ import retrofit2.http.*
 //В Retrofit этот интерфейс аннотируется специальными аннотациями для указания HTTP-методов, путей и параметров запросов.
 interface ApiService {
 
-    //реагистрация и авторизация
-
     @POST("/users/login")
     suspend fun getUserByLogin(@Body user: User): User
 

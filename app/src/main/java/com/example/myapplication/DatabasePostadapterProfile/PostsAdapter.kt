@@ -28,6 +28,11 @@ import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.ui.PlayerView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import com.example.myapplication.utils.ExoPlayerCache
+import com.google.android.exoplayer2.source.DefaultMediaSourceFactory
+import com.google.android.exoplayer2.upstream.DefaultDataSource
+import com.google.android.exoplayer2.upstream.cache.CacheDataSource
+
 
 class PostsAdapter(
     private val context: Context,
@@ -107,7 +112,24 @@ class PostsAdapter(
                 // Получаем или создаём ExoPlayer для текущего поста
                 var player = playerMap[postId]
                 if (player == null) {
-                    player = ExoPlayer.Builder(context).build()
+                    // Получаем общий экземпляр SimpleCache
+                    val cache = ExoPlayerCache.getInstance(context)
+
+                    // Создаем DataSource.Factory с кэшем
+                    val dataSourceFactory = DefaultDataSource.Factory(context)
+                    val cacheDataSourceFactory = CacheDataSource.Factory()
+                        .setCache(cache)
+                        .setUpstreamDataSourceFactory(dataSourceFactory)
+                        .setFlags(CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR)
+
+                    // Создаем MediaSourceFactory с использованием кэша
+                    val mediaSourceFactory = DefaultMediaSourceFactory(cacheDataSourceFactory)
+
+                    // Создаем экземпляр ExoPlayer с установленным MediaSourceFactory
+                    player = ExoPlayer.Builder(context)
+                        .setMediaSourceFactory(mediaSourceFactory)
+                        .build()
+
                     val videoUrl = "http://188.18.54.95:8000/media/videos/${post.media_url}"
                     val mediaItem = MediaItem.fromUri(Uri.parse(videoUrl))
                     player.setMediaItem(mediaItem)
@@ -121,6 +143,7 @@ class PostsAdapter(
                 // Привязываем плеер к PlayerView
                 holder.playerView.player = player
             }
+
         }
 
         // Обработка клика на лайк

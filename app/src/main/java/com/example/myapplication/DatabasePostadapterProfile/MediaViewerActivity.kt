@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.example.myapplication.R
 import com.example.myapplication.UserPost.User
+import com.example.myapplication.utils.ExoPlayerCache
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.database.ExoDatabaseProvider
@@ -26,22 +27,13 @@ class MediaViewerActivity : AppCompatActivity() {
     private lateinit var mediaType: String
     private var player: ExoPlayer? = null
 
-    // Создаем статический экземпляр кэша, чтобы использовать его везде
-    companion object {
-        private var simpleCache: SimpleCache? = null
-    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         // Инициализируем SimpleCache, если он еще не создан
-        if (simpleCache == null) {
-            val cacheDir = File(this.cacheDir, "media")
-            val cacheSize: Long = 100 * 1024 * 1024 // 100 МБ
-            val evictor = LeastRecentlyUsedCacheEvictor(cacheSize)
-            val databaseProvider = ExoDatabaseProvider(this)
-            simpleCache = SimpleCache(cacheDir, evictor, databaseProvider)
-        }
+
 
         setContentView(R.layout.activity_media_viewer)
 
@@ -79,10 +71,13 @@ class MediaViewerActivity : AppCompatActivity() {
 
     private fun initializePlayer(playerView: PlayerView) {
         if (player == null) {
+            // Получаем общий экземпляр SimpleCache
+            val cache = ExoPlayerCache.getInstance(this)
+
             // Создаем DataSource.Factory с кэшем
             val dataSourceFactory = DefaultDataSource.Factory(this)
             val cacheDataSourceFactory = CacheDataSource.Factory()
-                .setCache(simpleCache!!)
+                .setCache(cache)
                 .setUpstreamDataSourceFactory(dataSourceFactory)
                 .setFlags(CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR)
 
@@ -105,6 +100,7 @@ class MediaViewerActivity : AppCompatActivity() {
             playerView.player = player
         }
     }
+
 
     private fun releasePlayer() {
         player?.release()
