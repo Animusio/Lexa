@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="ExoStyledControls.Button.PlayPause">
+        <item name="android:layout_width">48dp</item> <!-- Ширина кнопки -->
+        <item name="android:layout_height">48dp</item> <!-- Высота кнопки -->
+        <item name="android:tint">@android:color/white</item> <!-- Цвет иконки -->
+    </style>
+
+
+</resources>

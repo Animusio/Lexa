@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- ImageView для изображений -->
+    <ImageView
+        android:id="@+id/fullscreenImageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitCenter"
+        android:contentDescription="@string/fullscreen_image" />
+
+    <!-- PlayerView для видео -->
+    <com.google.android.exoplayer2.ui.PlayerView
+        android:id="@+id/fullscreenPlayerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:use_controller="true" >
+    </com.google.android.exoplayer2.ui.PlayerView>
+
+    <ImageButton
+        android:id="@+id/imageButton2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#00FFFAFA"
+        app:srcCompat="@android:drawable/ic_menu_revert" />
+</FrameLayout>

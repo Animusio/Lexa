@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    android:backgroundTint="#000000"
+    tools:context=".RegisterAuth.AuthActivity">
+
+    <Button
+        android:id="@+id/button_auth"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="540dp"
+        android:insetLeft="0dp"
+        android:text="Войти"
+        android:textColorLink="#00000000"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/nameText_auth"
+        android:layout_width="233dp"
+        android:layout_height="53dp"
+        android:layout_marginTop="280dp"
+        android:backgroundTint="#664FA3"
+        android:ems="10"
+        android:hint="Имя"
+        android:inputType="text"
+        android:textColorHint="#40FDFDFD"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/passText_auth"
+        android:layout_width="233dp"
+        android:layout_height="53dp"
+        android:layout_marginTop="24dp"
+        android:backgroundTint="#664FA3"
+        android:ems="10"
+        android:hint="Пароль"
+        android:inputType="textPassword"
+        android:textColorHint="#40FDFDFD"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nameText_auth" />
+
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="85dp"
+        android:layout_height="110dp"
+        android:layout_marginTop="68dp"
+        android:backgroundTint="#664FA3"
+        android:text="L"
+        android:textColor="#664FA3"
+        android:textSize="96sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewLink"
+        android:layout_width="213dp"
+        android:layout_height="35dp"
+        android:layout_marginBottom="24dp"
+        android:text="Зарегистрироваться"
+        android:textAlignment="center"
+        android:textColor="#664FA3"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

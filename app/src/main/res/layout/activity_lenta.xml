@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    android:backgroundTint="#000000"
+    tools:context=".MainMenu.LentaActivity">
+
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="58dp"
+        android:layout_height="44dp"
+        android:layout_marginTop="4dp"
+        android:text="L"
+        android:textAlignment="center"
+        android:textColor="#664FA3"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+
+        android:id="@+id/textViewLink"
+        android:layout_width="121dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="60dp"
+        android:background="#40000000"
+        android:text="Для вас"
+        android:textAlignment="center"
+        android:textColor="#CCFFFFFF"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/button2"
+        android:layout_width="147dp"
+        android:layout_height="33dp"
+        android:layout_marginTop="60dp"
+        android:text="Отслеживаемое"
+        android:textAlignment="center"
+        android:textColor="#CCFFFFFF"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/button"
+        android:layout_width="15dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="60dp"
+        android:text=""
+        android:textAlignment="center"
+        android:textColor="#CCFFFFFF"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/button3"
+        android:layout_width="121dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="60dp"
+        android:text="Чаты"
+        android:textAlignment="center"
+        android:textColor="#CCFFFFFF"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/lentaList"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.454"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button2"
+        app:layout_constraintVertical_bias="10.0" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="80dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="24dp"
+        android:background="#FFFFFF"
+        android:text="TextView"
+        android:textColor="#757575"
+        app:layout_constraintStart_toStartOf="@+id/textViewLink"
+        app:layout_constraintTop_toTopOf="@+id/textViewLink" />
+
+    <Button
+        android:id="@+id/InternetButton"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="444dp"
+        android:background="@drawable/circle_button"
+        android:text="+"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        app:backgroundTint="@null"
+        app:layout_constraintBottom_toTopOf="@+id/view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button2"
+        app:layout_constraintVertical_bias="1.0" />
+
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="563dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="-5dp"
+        android:background="@drawable/top_border"
+        app:layout_constraintBottom_toBottomOf="@+id/lentaList"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="55dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/avatar1" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+
+    <!-- Прозрачный фон или измените на контрастный цвет -->
+    <solid android:color="@android:color/black" />
+
+    <!-- Только верхняя граница -->
+    <stroke
+        android:width="2dp"
+        android:color="#4DFFFFFF" /> <!-- Измените цвет на более контрастный, чтобы видеть границу -->
+
+    <!-- Установить только верхнюю линию -->
+    <padding android:top="2dp"/>
+</shape>
