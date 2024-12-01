@@ -7,18 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#000000"
-    android:backgroundTint="#000000"
     tools:context=".DataCreate.PostEditor">
-
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="22dp"
-        android:layout_height="24dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toStartOf="@+id/editTextPost"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/editTextPost"
-        app:srcCompat="@drawable/avatar1" />
 
     <Button
         android:id="@+id/buttonEditPost"
@@ -30,31 +19,32 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <EditText
+        android:id="@+id/editTextPost"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="52dp"
+        android:layout_marginEnd="16dp"
+        android:ems="10"
+        android:gravity="top"
+        android:hint="Введите текст поста..."
+        android:inputType="textMultiLine"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonEditPost" />
+
     <ImageButton
         android:id="@+id/MediaButton"
         android:layout_width="34dp"
         android:layout_height="35dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="4dp"
-        app:layout_constraintStart_toStartOf="@+id/editTextPost"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:contentDescription="Добавить медиа"
+        android:src="@android:drawable/ic_menu_gallery"
         app:layout_constraintTop_toBottomOf="@+id/editTextPost"
-        app:srcCompat="@android:drawable/ic_menu_gallery" />
-
-    <EditText
-        android:id="@+id/editTextPost"
-        android:layout_width="331dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
-        android:ems="10"
-        android:gravity="top"
-        android:hint="аувааув"
-        android:inputType="textMultiLine"
-        app:flow_horizontalAlign="start"
-        app:flow_verticalAlign="top"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.741"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="@+id/editTextPost" />
 
     <ImageView
         android:id="@+id/imageView4"
@@ -62,33 +52,32 @@
         android:layout_height="200dp"
         android:layout_marginTop="12dp"
         android:scaleType="fitCenter"
-        app:layout_constraintEnd_toEndOf="@+id/editTextPost"
-        app:layout_constraintHorizontal_bias="1"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/MediaButton"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextPost"
-        app:srcCompat="@drawable/avatar1" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <VideoView
-        android:id="@+id/videoView2"
+    <!-- Заменяем VideoView на PlayerView -->
+    <com.google.android.exoplayer2.ui.PlayerView
+        android:id="@+id/playerView"
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:layout_marginTop="12dp"
-        android:scaleType="fitCenter"
-        app:layout_constraintEnd_toEndOf="@+id/editTextPost"
-        app:layout_constraintHorizontal_bias="0.994"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/MediaButton"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextPost" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <ImageButton
         android:id="@+id/removeMediaButton"
         android:layout_width="28dp"
         android:layout_height="29dp"
-        android:layout_marginTop="376dp"
-        android:layout_marginEnd="28dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/btn_dialog" />
-
-
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:contentDescription="Удалить медиа"
+        android:src="@android:drawable/ic_menu_close_clear_cancel"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="@+id/imageView4"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
