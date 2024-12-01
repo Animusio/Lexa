@@ -24,7 +24,7 @@ class LentaActivity3 : AppCompatActivity() {
         val button2: TextView = findViewById(R.id.button2)
         val user = intent.getParcelableExtra<User>("user")
 
-        lentas.add(Post(2,"avatar2", "boby", "робби лох",0))
+        //lentas.add(Post(2,"avatar2", "boby", "робби лох",0))
 
         val adapter = PostsAdapter(this, lifecycleScope, user!!)  // Передаем только контекст
         lentaList.layoutManager = LinearLayoutManager(this)

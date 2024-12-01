@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -76,6 +77,7 @@ class PostsAdapter(
 
 
         // Показ или скрытие ImageButton в зависимости от пользователя
+
         holder.imageButton.visibility = if (post.nickname == user.login) View.VISIBLE else View.GONE
 
         // Отсоединяем предыдущий плеер от PlayerView
@@ -87,8 +89,8 @@ class PostsAdapter(
         holder.postLike.text = "💜${post.likes_count}"
 
         // Загрузка аватара
-        val avatarId = context.resources.getIdentifier(post.avatar, "drawable", context.packageName)
-        holder.avatar.setImageResource(if (avatarId != 0) avatarId else R.drawable.avatar1)
+
+        holder.avatar.setImageResource(R.drawable.avatar1)
 
         // Определение типа медиа
         val mimeType = getMimeType(post.media_url ?: "")
@@ -167,7 +169,7 @@ class PostsAdapter(
         // Переход к профилю при клике на аватар
         holder.avatar.setOnClickListener {
             val intent = Intent(context, ProfileActivity::class.java).apply {
-                putExtra("avatar", post.avatar)
+                putExtra("avatar", R.drawable.avatar1)
                 putExtra("username", post.nickname)
                 putExtra("postLike", post.post)
                 putExtra("user", user)
@@ -198,6 +200,8 @@ class PostsAdapter(
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
             context.startActivity(intent)
         }
+
+
 
         // Обработка нажатия на imageButton
         holder.imageButton.setOnClickListener { view ->

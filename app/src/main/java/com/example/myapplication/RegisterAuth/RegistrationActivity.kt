@@ -56,7 +56,12 @@ class RegistrationActivity : AppCompatActivity() {
         if (savedUsername != null && savedPassword != null) {
             // Пользователь уже авторизован, переходим на главную активность
             val intent = Intent(this, LentaActivity::class.java)
-            val user = User(savedUsername, savedPassword)
+            val user = User(
+                id = 0,              // Используйте 0, если `id` пока неизвестен
+                login = savedUsername,
+                password = savedPassword,
+                avatar_uri = null    // Можно передать null, если аватар пока неизвестен
+            )
             intent.putExtra("user", user)
             startActivity(intent)
             finish()  // Закрыть текущую активность
@@ -88,7 +93,12 @@ class RegistrationActivity : AppCompatActivity() {
             } else {
                 lifecycleScope.launch {
                     try {
-                        RetrofitInstance.apiService.createUser(User(login, pass))
+                        var user = RetrofitInstance.apiService.createUser(User(
+                            id = 0,              // Используйте 0, если `id` пока неизвестен
+                            login = login,
+                            password = pass,
+                            avatar_uri = null    // Можно передать null, если аватар пока неизвестен
+                        ))
                         // Сохраняем данные пользователя в EncryptedSharedPreferences
                         withContext(Dispatchers.IO) {
                             sharedPreferences.edit().apply {
@@ -108,7 +118,7 @@ class RegistrationActivity : AppCompatActivity() {
                                 Toast.LENGTH_SHORT
                             ).show()
                             val intent = Intent(this@RegistrationActivity, LentaActivity::class.java)
-                            val user = User(login, pass)
+
                             intent.putExtra("user", user)
                             startActivity(intent)
                             finish()

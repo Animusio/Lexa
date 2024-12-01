@@ -107,9 +107,9 @@ class PostEditor : AppCompatActivity() {
             val postText = postEditText.text.toString().trim()
             if (postText.isNotEmpty() || selectedMediaUri != null) {
                 val newPost = Post(
-                    id = 0,
-                    avatar = "avatar1",
-                    nickname = user?.login ?: "Неизвестный пользователь",
+                    0,
+                    user_id = user?.id ?: 0,
+                    user?.login ?: "Неизвестный пользователь",
                     post = postText,
                     likes_count = 0
                 )
@@ -157,6 +157,14 @@ class PostEditor : AppCompatActivity() {
                         val intent = Intent(this@PostEditor, LentaActivity::class.java)
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
                         Toast.makeText(this@PostEditor, "Пост опубликован!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@PostEditor, createdPost.user_id.toString(), Toast.LENGTH_SHORT).show()
+
+                        if (createdPost == null) {
+                            Log.d("PostDetails", "Post object is null")
+                        } else {
+                            Log.d("PostDetails", "Post Details: id=${createdPost.id}, nickname=${createdPost.nickname}, post=${createdPost.post}, likes_count=${createdPost.likes_count}, media_url=${createdPost.media_url}, user_id=${createdPost.user_id}")
+                        }
+
                         intent.putExtra("newPost", createdPost)
                         intent.putExtra("user", user)
                         startActivity(intent)

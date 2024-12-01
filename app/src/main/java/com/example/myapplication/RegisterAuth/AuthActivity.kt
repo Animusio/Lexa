@@ -52,7 +52,12 @@ class AuthActivity : AppCompatActivity() {
             else{
                 lifecycleScope.launch {
                     try {
-                        var user = RetrofitInstance.apiService.getUserByLogin(User(login,pass))
+                        var user = RetrofitInstance.apiService.getUserByLogin(User(
+                            id = 0,              // Используйте 0, если `id` пока неизвестен
+                            login = login,
+                            password = pass,
+                            avatar_uri = null    // Можно передать null, если аватар пока неизвестен
+                        ))
                         withContext(Dispatchers.Main) {
                             userLogin.text.clear()
                             userPass.text.clear()

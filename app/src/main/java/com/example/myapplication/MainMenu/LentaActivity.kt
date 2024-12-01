@@ -53,6 +53,10 @@ class LentaActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lenta)
 
+
+
+
+
         val imageView: ImageView = findViewById(R.id.imageView5)
 
         // Инициализация RecyclerView и адаптера
@@ -61,7 +65,8 @@ class LentaActivity : AppCompatActivity() {
         adapter = PostsAdapter(this, lifecycleScope, user!!)
         lentaList.layoutManager = LinearLayoutManager(this)
         lentaList.adapter = adapter
-
+        //у user пока нету id
+        Toast.makeText(this, user.id.toString(), Toast.LENGTH_SHORT).show()
 
 
         // После установки адаптера добавьте следующий код

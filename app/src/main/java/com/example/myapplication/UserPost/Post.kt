@@ -6,7 +6,7 @@ import android.os.Parcelable
 // Класс Post реализует Parcelable
 data class Post(
     val id: Int,
-    val avatar: String,
+    val user_id: Int,              // ID пользователя, сделавшего пост
     val nickname: String,
     var post: String,
     var likes_count: Int,
@@ -14,23 +14,23 @@ data class Post(
 ) : Parcelable {
 
     // Конструктор для создания объекта Post из Parcel
-    private constructor(parcel: Parcel) : this(
-        parcel.readInt(),
-        parcel.readString() ?: "",
-        parcel.readString() ?: "",
-        parcel.readString() ?: "",
-        parcel.readInt(),
-        parcel.readString()
+    constructor(parcel: Parcel) : this(
+        parcel.readInt(),           // id
+        parcel.readInt(),           // user_id
+        parcel.readString() ?: "",  // nickname
+        parcel.readString() ?: "",  // post
+        parcel.readInt(),           // likes_count
+        parcel.readString()         // media_url
     )
 
     // Запись полей объекта Post в Parcel
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeInt(id)
-        parcel.writeString(avatar)
-        parcel.writeString(nickname)
-        parcel.writeString(post)
-        parcel.writeInt(likes_count)
-        parcel.writeString(media_url)
+        parcel.writeInt(id)         // id
+        parcel.writeInt(user_id)    // user_id
+        parcel.writeString(nickname) // nickname
+        parcel.writeString(post)    // post
+        parcel.writeInt(likes_count) // likes_count
+        parcel.writeString(media_url) // media_url
     }
 
     // Метод описания содержимого (обычно возвращает 0)
