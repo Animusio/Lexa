@@ -52,17 +52,20 @@ class AuthActivity : AppCompatActivity() {
             else{
                 lifecycleScope.launch {
                     try {
-                        var user = RetrofitInstance.apiService.getUserByLogin(User(
-                            id = 0,              // Используйте 0, если `id` пока неизвестен
+                        val temporaryUser = User(
+                            id = 123,  // Установите временное значение, например, 0
                             login = login,
                             password = pass,
-                            avatar_uri = null    // Можно передать null, если аватар пока неизвестен
-                        ))
+                            avatar_uri = null  // Можно передать null, если аватар пока неизвестен
+                        )
+                        var user = RetrofitInstance.apiService.getUserByLogin(temporaryUser)
                         withContext(Dispatchers.Main) {
                             userLogin.text.clear()
                             userPass.text.clear()
 
                             val editor = encryptedSharedPreferences.edit()
+
+                            editor.putInt("id", user.id)
                             editor.putString("username", login)
                             editor.putString("password", pass)
                             editor.apply()  // сохраняем данные
@@ -72,7 +75,6 @@ class AuthActivity : AppCompatActivity() {
                                 "Авторизация успешна\uD83E\uDD75",
                                 Toast.LENGTH_SHORT
                             ).show()
-
                             val intent = Intent(this@AuthActivity, LentaActivity::class.java)
                             intent.putExtra("user", user)
                             startActivity(intent)

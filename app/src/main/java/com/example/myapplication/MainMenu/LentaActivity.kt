@@ -65,8 +65,10 @@ class LentaActivity : AppCompatActivity() {
         adapter = PostsAdapter(this, lifecycleScope, user!!)
         lentaList.layoutManager = LinearLayoutManager(this)
         lentaList.adapter = adapter
-        //у user пока нету id
-        Toast.makeText(this, user.id.toString(), Toast.LENGTH_SHORT).show()
+
+        Toast.makeText(this, "это user.id = ${user.id.toString()}", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "это user.avatar_uri = ${user.avatar_uri.toString()}", Toast.LENGTH_SHORT).show()
+
 
 
         // После установки адаптера добавьте следующий код

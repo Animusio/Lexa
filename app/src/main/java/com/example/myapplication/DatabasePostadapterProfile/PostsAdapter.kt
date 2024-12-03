@@ -169,12 +169,11 @@ class PostsAdapter(
         // Переход к профилю при клике на аватар
         holder.avatar.setOnClickListener {
             val intent = Intent(context, ProfileActivity::class.java).apply {
-                putExtra("avatar", R.drawable.avatar1)
-                putExtra("username", post.nickname)
-                putExtra("postLike", post.post)
-                putExtra("user", user)
+                //putExtra("avatar", R.drawable.avatar1)
+                //putExtra("username", post.nickname)
+                //putExtra("postLike", post.post)
             }
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+            //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
             context.startActivity(intent)
         }
 

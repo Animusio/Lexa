@@ -49,7 +49,7 @@ class RegistrationActivity : AppCompatActivity() {
                 EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
             )
         }
-
+        val savedIdw = sharedPreferences.getInt("id", 0)
         val savedUsername = sharedPreferences.getString("username", null)
         val savedPassword = sharedPreferences.getString("password", null)
 
@@ -57,7 +57,7 @@ class RegistrationActivity : AppCompatActivity() {
             // Пользователь уже авторизован, переходим на главную активность
             val intent = Intent(this, LentaActivity::class.java)
             val user = User(
-                id = 0,              // Используйте 0, если `id` пока неизвестен
+                id = savedIdw,              // Используйте 0, если `id` пока неизвестен
                 login = savedUsername,
                 password = savedPassword,
                 avatar_uri = null    // Можно передать null, если аватар пока неизвестен
@@ -94,7 +94,7 @@ class RegistrationActivity : AppCompatActivity() {
                 lifecycleScope.launch {
                     try {
                         var user = RetrofitInstance.apiService.createUser(User(
-                            id = 0,              // Используйте 0, если `id` пока неизвестен
+                            id = 228,              // Используйте 0, если `id` пока неизвестен
                             login = login,
                             password = pass,
                             avatar_uri = null    // Можно передать null, если аватар пока неизвестен
@@ -102,6 +102,7 @@ class RegistrationActivity : AppCompatActivity() {
                         // Сохраняем данные пользователя в EncryptedSharedPreferences
                         withContext(Dispatchers.IO) {
                             sharedPreferences.edit().apply {
+                                putInt("id", RetrofitInstance.apiService.getUserByLogin(user).id)
                                 putString("username", login)
                                 putString("password", pass)
                                 apply()
