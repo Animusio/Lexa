@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.myapplication.DataCreate.PostEditor
 import com.example.myapplication.DatabasePostadapterProfile.PostsAdapter
+import com.example.myapplication.DatabasePostadapterProfile.ProfileActivity
 import com.example.myapplication.R
 import com.example.myapplication.UserPost.Post
 import com.example.myapplication.UserPost.PostRepository
@@ -69,9 +70,15 @@ class LentaActivity : AppCompatActivity() {
         Toast.makeText(this, "это user.id = ${user.id.toString()}", Toast.LENGTH_SHORT).show()
         Toast.makeText(this, "это user.avatar_uri = ${user.avatar_uri.toString()}", Toast.LENGTH_SHORT).show()
 
+        val imageView5: ImageView = findViewById(R.id.imageView5)
+        imageView5.setOnClickListener {
+            val intent = Intent(this, ProfileActivity::class.java)
+            intent.putExtra("user", user)
+            startActivity(intent)
+        }
 
 
-        // После установки адаптера добавьте следующий код
+
         lentaList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(rv: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(rv, newState)

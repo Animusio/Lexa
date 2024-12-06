@@ -47,5 +47,15 @@ interface ApiService {
         @Path("media_type") mediaType: String,
         @Path("filename") filename: String
     ): Response<ResponseBody>
-    
+
+
+
+    @PUT("users/{user_id}/avatar")
+    suspend fun updateUserAvatar(
+        @Path("user_id") userId: Int,
+        @Body body: Map<String, String>
+    ): User
+
+
+
 }

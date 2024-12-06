@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/profile_avatar"
         android:layout_width="76dp"
         android:layout_height="72dp"
         android:layout_marginStart="16dp"
@@ -40,13 +40,23 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/nickname"
+        android:id="@+id/profile_username"
         android:layout_width="92dp"
         android:layout_height="42dp"
         android:layout_marginStart="92dp"
         android:layout_marginTop="96dp"
         android:text="nickname"
         app:layout_constraintStart_toStartOf="@+id/button_back"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/button_change_avatar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Изменить аватар"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.991"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
