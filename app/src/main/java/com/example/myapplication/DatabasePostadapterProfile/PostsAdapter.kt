@@ -24,6 +24,7 @@ import com.example.myapplication.R
 import com.example.myapplication.UserPost.Post
 import com.example.myapplication.UserPost.PostRepository
 import com.example.myapplication.UserPost.User
+import com.example.myapplication.network.RetrofitInstance
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.ui.PlayerView
@@ -33,6 +34,8 @@ import com.example.myapplication.utils.ExoPlayerCache
 import com.google.android.exoplayer2.source.DefaultMediaSourceFactory
 import com.google.android.exoplayer2.upstream.DefaultDataSource
 import com.google.android.exoplayer2.upstream.cache.CacheDataSource
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 
 class PostsAdapter(
@@ -64,20 +67,16 @@ class PostsAdapter(
         return PostViewHolder(view)
     }
 
-    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
         val post = getItem(position)
         val postId = post.id
 
-        // Сбрасываем видимость медиа-контейнера и его содержимого
+        // Сброс медиа-контейнера и прочего
         holder.mediaContainer.visibility = View.GONE
         holder.postImageView.visibility = View.GONE
         holder.playerView.visibility = View.GONE
 
-
-
-        // Показ или скрытие ImageButton в зависимости от пользователя
-
+        // Показать или скрыть ImageButton в зависимости от владельца поста
         holder.imageButton.visibility = if (post.nickname == user.login) View.VISIBLE else View.GONE
 
         // Отсоединяем предыдущий плеер от PlayerView
@@ -88,18 +87,40 @@ class PostsAdapter(
         holder.postText.text = post.post
         holder.postLike.text = "💜${post.likes_count}"
 
-        // Загрузка аватара
+        // Загрузка аватара внутри onBindViewHolder:
+        lifecycleScope.launch {
+            try {
+                val author = RetrofitInstance.apiService.getUserById(post.user_id)
+                val avatarUrl = if (!author.avatar_uri.isNullOrEmpty()) {
+                    "http://188.18.54.95:8000/media/images/${author.avatar_uri}"
+                } else {
+                    null
+                }
 
-        holder.avatar.setImageResource(R.drawable.avatar1)
+                withContext(Dispatchers.Main) {
+                    Glide.with(holder.itemView)
+                        .load(avatarUrl)
+                        .placeholder(R.drawable.avatar3)
+                        .error(R.drawable.avatar3)
+                        .into(holder.avatar)
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Glide.with(holder.itemView)
+                        .load(R.drawable.avatar3)
+                        .into(holder.avatar)
+                }
+            }
+        }
 
-        // Определение типа медиа
+
+
+        // Загрузка медиа контента поста (изображение/видео)
         val mimeType = getMimeType(post.media_url ?: "")
-
         if (!post.media_url.isNullOrEmpty() && mimeType != null) {
             holder.mediaContainer.visibility = View.VISIBLE
 
             if (mimeType.startsWith("image")) {
-                // Показать ImageView и загрузить изображение
                 holder.postImageView.visibility = View.VISIBLE
                 val imageUrl = "http://188.18.54.95:8000/media/images/${post.media_url}"
                 Glide.with(holder.itemView)
@@ -108,26 +129,17 @@ class PostsAdapter(
                     .error(R.drawable.avatar3)
                     .into(holder.postImageView)
             } else if (mimeType.startsWith("video")) {
-                // Показать PlayerView
                 holder.playerView.visibility = View.VISIBLE
-
-                // Получаем или создаём ExoPlayer для текущего поста
                 var player = playerMap[postId]
                 if (player == null) {
-                    // Получаем общий экземпляр SimpleCache
                     val cache = ExoPlayerCache.getInstance(context)
-
-                    // Создаем DataSource.Factory с кэшем
                     val dataSourceFactory = DefaultDataSource.Factory(context)
                     val cacheDataSourceFactory = CacheDataSource.Factory()
                         .setCache(cache)
                         .setUpstreamDataSourceFactory(dataSourceFactory)
                         .setFlags(CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR)
 
-                    // Создаем MediaSourceFactory с использованием кэша
                     val mediaSourceFactory = DefaultMediaSourceFactory(cacheDataSourceFactory)
-
-                    // Создаем экземпляр ExoPlayer с установленным MediaSourceFactory
                     player = ExoPlayer.Builder(context)
                         .setMediaSourceFactory(mediaSourceFactory)
                         .build()
@@ -138,17 +150,13 @@ class PostsAdapter(
                     player.prepare()
                     player.playWhenReady = false
 
-                    // Сохраняем плеер с ключом postId
                     playerMap[postId] = player
                 }
-
-                // Привязываем плеер к PlayerView
                 holder.playerView.player = player
             }
-
         }
 
-        // Обработка клика на лайк
+        // Обработка лайка
         holder.postLike.setOnClickListener {
             holder.postLike.alpha = 0.5f
             lifecycleScope.launch {
@@ -170,16 +178,14 @@ class PostsAdapter(
         holder.avatar.setOnClickListener {
             val username = post.nickname
             val postLike = post.post
-                val intent = Intent(context, ProfileActivity::class.java).apply {
-                    putExtra("avatar", R.drawable.avatar1)
-                    putExtra("username", username)
-                    putExtra("postLike", postLike)
-                    putExtra("user", user)
-                }
-
-                context.startActivity(intent)
+            val intent = Intent(context, ProfileActivity::class.java).apply {
+                putExtra("avatar", R.drawable.avatar1)
+                putExtra("username", username)
+                putExtra("postLike", postLike)
+                putExtra("user", user)
+            }
+            context.startActivity(intent)
         }
-
 
         // Переход к MediaViewerActivity при клике на изображение
         holder.postImageView.setOnClickListener {
@@ -204,17 +210,11 @@ class PostsAdapter(
             context.startActivity(intent)
         }
 
-
-
-        // Обработка нажатия на imageButton
+        // Обработка нажатия на imageButton (popup-меню)
         holder.imageButton.setOnClickListener { view ->
             val popupMenu = PopupMenu(context, view)
             popupMenu.menuInflater.inflate(R.menu.post_options_menu, popupMenu.menu)
-
-            // Проверяем, является ли текущий пользователь автором поста
             popupMenu.menu.findItem(R.id.menu_delete).isVisible = post.nickname == user.login
-
-            // Обработка выбора пункта меню
             popupMenu.setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.menu_delete -> {
@@ -227,6 +227,7 @@ class PostsAdapter(
             popupMenu.show()
         }
     }
+
 
 
     fun stopPlaying() {

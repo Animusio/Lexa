@@ -32,8 +32,9 @@ interface ApiService {
     @DELETE("/posts/delete/{id}")
     suspend fun deletePost(@Path("id") postId: Int): Response<Unit>
 
-    //медиа
 
+
+    //медиа
     @Multipart
     @POST("/upload/")
     suspend fun uploadMedia(
@@ -50,12 +51,21 @@ interface ApiService {
 
 
 
+
     @PUT("users/{user_id}/avatar")
     suspend fun updateUserAvatar(
         @Path("user_id") userId: Int,
         @Body body: Map<String, String>
     ): User
 
+    @Streaming
+    @GET("/users/{user_id}/avatar_image")
+    suspend fun getUserAvatarImage(
+        @Path("user_id") userId: Int
+    ): Response<ResponseBody>
 
+
+    @GET("/users/{user_id}")
+    suspend fun getUserById(@Path("user_id") userId: Int): User
 
 }
