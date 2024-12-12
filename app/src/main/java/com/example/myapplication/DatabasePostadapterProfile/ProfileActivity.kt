@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.myapplication.MainMenu.LentaActivity
 import com.example.myapplication.R
@@ -27,11 +28,11 @@ import java.io.InputStream
 class ProfileActivity : AppCompatActivity() {
     private lateinit var profileAvatar: ImageView
     private lateinit var profileUsername: TextView
-    private lateinit var buttonChangeAvatar: Button
     private var selectedImageUri: Uri? = null
     private var user: User? = null
 
     private val PICK_IMAGE_REQUEST = 1001
+    private var userId: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,22 +40,31 @@ class ProfileActivity : AppCompatActivity() {
 
         profileAvatar = findViewById(R.id.profile_avatar)
         profileUsername = findViewById(R.id.profile_username)
-        buttonChangeAvatar = findViewById(R.id.button_change_avatar)
+        //buttonChangeAvatar = findViewById(R.id.button_change_avatar)
 
         user = intent.getParcelableExtra("user")
 
         profileUsername.text = user?.login ?: "No username"
-        if (!user?.avatar_uri.isNullOrEmpty()) {
-            Glide.with(this)
-                .load("http://188.18.54.95:8000/media/images/${user!!.avatar_uri}")
-                .placeholder(R.drawable.avatar1)
-                .error(R.drawable.avatar1)
-                .into(profileAvatar)
-        } else {
-            profileAvatar.setImageResource(R.drawable.avatar1)
+
+
+
+
+
+        // Загружаем аватар пользователя по его id
+        userId = intent.getIntExtra("user_id", -1)
+        if (userId == -1) {
+            Toast.makeText(this, "Ошибка: ID пользователя не передан", Toast.LENGTH_SHORT).show()
+            finish()
+            return
         }
 
-        buttonChangeAvatar.setOnClickListener {
+        // Загружаем данные пользователя
+        lifecycleScope.launch {
+            loadUserProfile(userId)
+        }
+
+
+        profileAvatar.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK)
             intent.type = "image/*"
             startActivityForResult(intent, PICK_IMAGE_REQUEST)
@@ -72,6 +82,28 @@ class ProfileActivity : AppCompatActivity() {
         }
     }
 
+    private suspend fun loadUserProfile(userId: Int) {
+        try {
+            val user = RetrofitInstance.apiService.getUserById(userId)
+            withContext(Dispatchers.Main) {
+                profileUsername.text = user.login
+                val avatarUrl = if (!user.avatar_uri.isNullOrEmpty()) {
+                    "http://188.18.54.95:8000/media/images/${user.avatar_uri}"
+                } else {
+                    null
+                }
+                Glide.with(this@ProfileActivity)
+                    .load(avatarUrl)
+                    .placeholder(R.drawable.avatar3)
+                    .error(R.drawable.avatar3)
+                    .into(profileAvatar)
+            }
+        } catch (e: Exception) {
+            withContext(Dispatchers.Main) {
+                Toast.makeText(this@ProfileActivity, "Ошибка загрузки профиля: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
     private fun uploadAvatar(uri: Uri) {
         val contentResolver = contentResolver
         val mimeType = contentResolver.getType(uri)

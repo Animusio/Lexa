@@ -183,6 +183,7 @@ class PostsAdapter(
                 putExtra("username", username)
                 putExtra("postLike", postLike)
                 putExtra("user", user)
+                putExtra("user_id", post.user_id)
             }
             context.startActivity(intent)
         }
