@@ -59,12 +59,6 @@ class LentaActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lenta)
 
-
-
-
-
-        val imageView: ImageView = findViewById(R.id.imageView5)
-
         // Инициализация RecyclerView и адаптера
         lentaList = findViewById(R.id.lentaList)
         val user = intent.getParcelableExtra<User>("user")
