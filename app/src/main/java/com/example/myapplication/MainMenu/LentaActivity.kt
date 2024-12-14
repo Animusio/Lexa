@@ -27,6 +27,7 @@ import com.example.myapplication.R
 import com.example.myapplication.UserPost.Post
 import com.example.myapplication.UserPost.PostRepository
 import com.example.myapplication.UserPost.User
+import com.example.myapplication.network.RetrofitInstance
 import com.google.android.exoplayer2.database.ExoDatabaseProvider
 import com.google.android.exoplayer2.upstream.cache.LeastRecentlyUsedCacheEvictor
 import com.google.android.exoplayer2.upstream.cache.SimpleCache
@@ -39,6 +40,8 @@ import okhttp3.WebSocketListener
 import java.util.concurrent.TimeUnit
 import com.google.gson.Gson
 import com.google.gson.JsonObject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.File
 
 class LentaActivity : AppCompatActivity() {
@@ -90,6 +93,9 @@ class LentaActivity : AppCompatActivity() {
         imageView5.setOnClickListener {
             val intent = Intent(this, ProfileActivity::class.java)
             intent.putExtra("user", user)
+            intent.putExtra("avatar", R.drawable.avatar1)
+            intent.putExtra("username", user.login)
+            intent.putExtra("user_id", user.id)
             startActivity(intent)
         }
 
@@ -105,7 +111,29 @@ class LentaActivity : AppCompatActivity() {
         })
 
 
+        lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                val author = RetrofitInstance.apiService.getUserById(user.id)
+                val avatarUrl = if (!author.avatar_uri.isNullOrEmpty()) {
+                    "http://188.18.54.95:8000/media/images/${author.avatar_uri}"
+                } else {
+                    null
+                }
 
+                // Возвращаемся в главный поток для обновления UI
+                withContext(Dispatchers.Main) {
+                    Glide.with(this@LentaActivity) // Замените на нужный контекст, если это не LentaActivity
+                        .load(avatarUrl)
+                        .placeholder(R.drawable.avatar3)
+                        .error(R.drawable.avatar3)
+                        .into(imageView5)
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(this@LentaActivity, "Ошибка загрузки аватара: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
         // Загружаем посты с сервера при первом запуске
         lifecycleScope.launch {
             loadPostsFromServer()
