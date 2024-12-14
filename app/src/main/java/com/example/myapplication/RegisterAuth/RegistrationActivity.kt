@@ -50,6 +50,7 @@ class RegistrationActivity : AppCompatActivity() {
             )
         }
         val savedIdw = sharedPreferences.getInt("id", 0)
+        Log.d("ProfileActivity", "loggedInUserId: $savedIdw")
         val savedUsername = sharedPreferences.getString("username", null)
         val savedPassword = sharedPreferences.getString("password", null)
 

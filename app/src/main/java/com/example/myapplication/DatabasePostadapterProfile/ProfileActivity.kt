@@ -33,6 +33,7 @@ class ProfileActivity : AppCompatActivity() {
 
     private val PICK_IMAGE_REQUEST = 1001
     private var userId: Int = -1
+    private var postUsername: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,15 +44,13 @@ class ProfileActivity : AppCompatActivity() {
         //buttonChangeAvatar = findViewById(R.id.button_change_avatar)
 
         user = intent.getParcelableExtra("user")
+        postUsername = intent.getStringExtra("username") ?: "Неизвестный пользователь"
 
         profileUsername.text = user?.login ?: "No username"
 
-
-
-
-
-        // Загружаем аватар пользователя по его id
         userId = intent.getIntExtra("user_id", -1)
+
+
         if (userId == -1) {
             Toast.makeText(this, "Ошибка: ID пользователя не передан", Toast.LENGTH_SHORT).show()
             finish()
@@ -62,12 +61,19 @@ class ProfileActivity : AppCompatActivity() {
         lifecycleScope.launch {
             loadUserProfile(userId)
         }
-
-
-        profileAvatar.setOnClickListener {
-            val intent = Intent(Intent.ACTION_PICK)
-            intent.type = "image/*"
-            startActivityForResult(intent, PICK_IMAGE_REQUEST)
+        //Toast.makeText(this, "userid-${user?.id} postUserId-${userId}", Toast.LENGTH_SHORT).show()
+        if (user?.id  == userId) {
+            // Это профиль авторизованного пользователя
+            profileAvatar.setOnClickListener {
+                val intent = Intent(Intent.ACTION_PICK)
+                intent.type = "image/*"
+                startActivityForResult(intent, PICK_IMAGE_REQUEST)
+            }
+        } else {
+            // Это профиль другого пользователя
+            profileAvatar.setOnClickListener {
+                Toast.makeText(this, "Нанесён удар по ${postUsername}", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -100,7 +106,7 @@ class ProfileActivity : AppCompatActivity() {
             }
         } catch (e: Exception) {
             withContext(Dispatchers.Main) {
-                Toast.makeText(this@ProfileActivity, "Ошибка загрузки профиля: ${e.message}", Toast.LENGTH_SHORT).show()
+                //Toast.makeText(this@ProfileActivity, "Ошибка загрузки профиля: ${e.message}", Toast.LENGTH_SHORT).show()
             }
         }
     }

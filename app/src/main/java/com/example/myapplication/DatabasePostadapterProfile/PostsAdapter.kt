@@ -71,6 +71,12 @@ class PostsAdapter(
         val post = getItem(position)
         val postId = post.id
 
+
+        val postuserId = post.user_id
+        Log.e("poch", "post user id = $postuserId")
+        Log.e("poch", "user id = ${user.id}")
+
+
         // Сброс медиа-контейнера и прочего
         holder.mediaContainer.visibility = View.GONE
         holder.postImageView.visibility = View.GONE
@@ -112,8 +118,6 @@ class PostsAdapter(
                 }
             }
         }
-
-
 
         // Загрузка медиа контента поста (изображение/видео)
         val mimeType = getMimeType(post.media_url ?: "")

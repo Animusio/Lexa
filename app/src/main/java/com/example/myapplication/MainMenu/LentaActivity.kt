@@ -17,6 +17,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.security.crypto.EncryptedSharedPreferences
+import androidx.security.crypto.MasterKey
 import com.bumptech.glide.Glide
 import com.example.myapplication.DataCreate.PostEditor
 import com.example.myapplication.DatabasePostadapterProfile.PostsAdapter
@@ -69,6 +71,20 @@ class LentaActivity : AppCompatActivity() {
 
         Toast.makeText(this, "это user.id = ${user.id.toString()}", Toast.LENGTH_SHORT).show()
         Toast.makeText(this, "это user.avatar_uri = ${user.avatar_uri.toString()}", Toast.LENGTH_SHORT).show()
+
+
+        val masterKeyAlias = MasterKey.Builder(this)
+            .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+            .build()
+        val encryptedSharedPreferences = EncryptedSharedPreferences.create(
+            this,
+            "encrypted_prefs",  // Название файла SharedPreferences
+            masterKeyAlias,
+            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+        )
+
+        val loggedInUserId = encryptedSharedPreferences.getInt("id", 0) // ID текущего авторизованного пользователя
 
         val imageView5: ImageView = findViewById(R.id.imageView5)
         imageView5.setOnClickListener {
