@@ -57,8 +57,8 @@ class LentaActivity : AppCompatActivity() {
         lentaList.layoutManager = LinearLayoutManager(this)
         lentaList.adapter = adapter
 
-        Toast.makeText(this, "это user.id = ${user.id.toString()}", Toast.LENGTH_SHORT).show()
-        Toast.makeText(this, "это user.avatar_uri = ${user.avatar_uri.toString()}", Toast.LENGTH_SHORT).show()
+        //Toast.makeText(this, "это user.id = ${user.id.toString()}", Toast.LENGTH_SHORT).show()
+        //Toast.makeText(this, "это user.avatar_uri = ${user.avatar_uri.toString()}", Toast.LENGTH_SHORT).show()
 
 
         val masterKeyAlias = MasterKey.Builder(this)

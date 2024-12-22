@@ -75,7 +75,6 @@ class RegistrationActivity : AppCompatActivity() {
         val linkToReg2: TextView = findViewById(R.id.textViewLink2)
 
         linkToReg2.setOnClickListener {
-            Toast.makeText(this, "$savedUsername $savedPassword", Toast.LENGTH_SHORT).show()
             val intent = Intent(this, AuthActivity::class.java)
             startActivity(intent)
             finish()
