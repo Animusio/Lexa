@@ -50,5 +50,4 @@
         app:layout_constraintStart_toStartOf="@+id/button_back"
         app:layout_constraintTop_toTopOf="parent" />
 
-
 </androidx.constraintlayout.widget.ConstraintLayout>

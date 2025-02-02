@@ -5,10 +5,12 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.material3.Button
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.Lexa.R
@@ -27,7 +29,6 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var profileUsername: TextView
     private var selectedImageUri: Uri? = null
     private var user: User? = null
-
     private val PICK_IMAGE_REQUEST = 1001
     private var userId: Int = -1
     private var postUsername: String = ""
@@ -38,28 +39,28 @@ class ProfileActivity : AppCompatActivity() {
 
         profileAvatar = findViewById(R.id.profile_avatar)
         profileUsername = findViewById(R.id.profile_username)
-        //buttonChangeAvatar = findViewById(R.id.button_change_avatar)
+
+        // Добавляем кнопку назад
+        val backButton: Button = findViewById(R.id.button_back)
+        backButton.setOnClickListener {
+            finish()
+        }
 
         user = intent.getParcelableExtra("user")
         postUsername = intent.getStringExtra("username") ?: "Неизвестный пользователь"
-
         profileUsername.text = user?.login ?: "No username"
-
         userId = intent.getIntExtra("user_id", -1)
-
-
         if (userId == -1) {
             Toast.makeText(this, "Ошибка: ID пользователя не передан", Toast.LENGTH_SHORT).show()
             finish()
             return
         }
-
         // Загружаем данные пользователя
         lifecycleScope.launch {
             loadUserProfile(userId)
         }
-        //Toast.makeText(this, "userid-${user?.id} postUserId-${userId}", Toast.LENGTH_SHORT).show()
-        if (user?.id  == userId) {
+
+        if (user?.id == userId) {
             // Это профиль авторизованного пользователя
             profileAvatar.setOnClickListener {
                 val intent = Intent(Intent.ACTION_PICK)
@@ -107,6 +108,7 @@ class ProfileActivity : AppCompatActivity() {
             }
         }
     }
+
     private fun uploadAvatar(uri: Uri) {
         val contentResolver = contentResolver
         val mimeType = contentResolver.getType(uri)
@@ -114,13 +116,11 @@ class ProfileActivity : AppCompatActivity() {
             Toast.makeText(this, "Неизвестный тип файла", Toast.LENGTH_SHORT).show()
             return
         }
-
         val inputStream = contentResolver.openInputStream(uri)
         if (inputStream == null) {
             Toast.makeText(this, "Не удалось открыть выбранный файл", Toast.LENGTH_SHORT).show()
             return
         }
-
         val fileBytes = inputStream.readBytes()
         val requestBody = RequestBody.create(mimeType.toMediaTypeOrNull(), fileBytes)
         val multipartBody = MultipartBody.Part.createFormData("file", "avatar_${user?.id}.jpg", requestBody)
@@ -151,7 +151,10 @@ class ProfileActivity : AppCompatActivity() {
     private fun updateUserAvatarOnServer(userId: Int, mediaFileName: String) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val response = RetrofitInstance.apiService.updateUserAvatar(userId, mapOf("avatar_uri" to mediaFileName))
+                val response = RetrofitInstance.apiService.updateUserAvatar(
+                    userId,
+                    mapOf("avatar_uri" to mediaFileName)
+                )
                 withContext(Dispatchers.Main) {
                     if (response != null) {
                         // Обновляем локальную модель user
