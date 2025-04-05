@@ -10,10 +10,13 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.material3.Button
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.Lexa.R
+import com.example.Lexa.UserPost.Post
 import com.example.Lexa.UserPost.User
 import com.example.Lexa.network.RetrofitInstance
 import kotlinx.coroutines.CoroutineScope
@@ -27,6 +30,7 @@ import okhttp3.RequestBody
 class ProfileActivity : AppCompatActivity() {
     private lateinit var profileAvatar: ImageView
     private lateinit var profileUsername: TextView
+    private lateinit var lentaList: RecyclerView // Добавляем RecyclerView
     private var selectedImageUri: Uri? = null
     private var user: User? = null
     private val PICK_IMAGE_REQUEST = 1001
@@ -39,6 +43,8 @@ class ProfileActivity : AppCompatActivity() {
 
         profileAvatar = findViewById(R.id.profile_avatar)
         profileUsername = findViewById(R.id.profile_username)
+        lentaList = findViewById(R.id.lentaList) // Инициализируем RecyclerView
+
 
         // Добавляем кнопку назад
         val backButton: Button = findViewById(R.id.button_back)
@@ -55,9 +61,14 @@ class ProfileActivity : AppCompatActivity() {
             finish()
             return
         }
-        // Загружаем данные пользователя
+
+        // Настраиваем RecyclerView
+        setupRecyclerView()
+
+        // Загружаем данные пользователя и посты
         lifecycleScope.launch {
             loadUserProfile(userId)
+            loadUserPosts(userId) // Добавляем загрузку постов
         }
 
         if (user?.id == userId) {
@@ -71,6 +82,37 @@ class ProfileActivity : AppCompatActivity() {
             // Это профиль другого пользователя
             profileAvatar.setOnClickListener {
                 Toast.makeText(this, "Нанесён удар по ${postUsername}", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    // Настройка RecyclerView
+    private fun setupRecyclerView() {
+        val postsAdapter = PostsAdapter(this, lifecycleScope, user!!) // Предполагаем, что PostsAdapter существует
+        val layoutManager = LinearLayoutManager(this)
+        lentaList.layoutManager = LinearLayoutManager(this)
+        lentaList.adapter = postsAdapter
+
+        val dividerItemDecoration = DividerItemDecoration(
+            lentaList.context,
+            layoutManager.orientation
+        )
+        lentaList.addItemDecoration(dividerItemDecoration)
+    }
+
+    // Загрузка постов пользователя
+    private suspend fun loadUserPosts(userId: Int) {
+        try {
+            val response = RetrofitInstance.apiService.getPostsByUser(userId) // Предполагаем, что метод существует
+            if (response.isSuccessful) {
+                val posts = response.body() ?: emptyList()
+                withContext(Dispatchers.Main) {
+                    (lentaList.adapter as PostsAdapter).submitList(posts) // Обновляем адаптер
+                }
+            }
+        } catch (e: Exception) {
+            withContext(Dispatchers.Main) {
+                Toast.makeText(this@ProfileActivity, "Ошибка загрузки постов: ${e.message}", Toast.LENGTH_SHORT).show()
             }
         }
     }

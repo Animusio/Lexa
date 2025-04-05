@@ -118,6 +118,7 @@ class LentaActivity : AppCompatActivity() {
                 }
             }
         }
+
         // Загружаем посты с сервера при первом запуске
         lifecycleScope.launch {
             loadPostsFromServer()
@@ -141,18 +142,23 @@ class LentaActivity : AppCompatActivity() {
         val line: TextView = findViewById(R.id.textView2)
         val InternetButton: Button = findViewById(R.id.InternetButton)
 
-        button2.setOnClickListener {
-            val intent = Intent(this, LentaActivity2::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
-            intent.putExtra("user", user)
-            startActivity(intent)
-        }
-        button3.setOnClickListener {
-            val intent = Intent(this, LentaActivity3::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
-            intent.putExtra("user", user)
-            startActivity(intent)
-        }
+
+        // ЭТИ ШТУЧКИ В ДОРАБОТКЕ ПОКА
+        //button2.setOnClickListener {
+            //val intent = Intent(this, LentaActivity2::class.java)
+            //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+            //intent.putExtra("user", user)
+            //startActivity(intent)
+        //}
+        //button3.setOnClickListener {
+            //val intent = Intent(this, LentaActivity3::class.java)
+            //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+            //intent.putExtra("user", user)
+            //startActivity(intent)
+        //}
+
+
+
         InternetButton.setOnClickListener {
             val intent = Intent(this, PostEditor::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)

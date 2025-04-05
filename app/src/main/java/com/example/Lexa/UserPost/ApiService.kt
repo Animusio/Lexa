@@ -20,6 +20,9 @@ interface ApiService {
     @GET("/posts")
     suspend fun getAllPosts(): Response<List<Post>>
 
+    @GET("/posts/user/{user_id}")
+    suspend fun getPostsByUser(@Path("user_id") userId: Int): Response<List<Post>>
+
     @POST("/posts/create")
     suspend fun createPost(@Body post: Post): Response<Post>
 
@@ -31,6 +34,8 @@ interface ApiService {
 
     @DELETE("/posts/delete/{id}")
     suspend fun deletePost(@Path("id") postId: Int): Response<Unit>
+
+
 
 
 

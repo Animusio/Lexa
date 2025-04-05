@@ -11,7 +11,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/lentaList"
-        android:layout_width="390dp"
+        android:layout_width="0dp"
         android:layout_height="576dp"
         android:layout_marginTop="204dp"
         app:layout_constraintEnd_toEndOf="parent"
